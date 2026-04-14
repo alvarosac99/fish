@@ -1,5 +1,6 @@
 if status is-interactive
-    fastfetch --structure Title:Separator:OS:Kernel:Uptime:Packages:Memory
+    set distro_id (grep "^ID=" /etc/os-release | cut -d= -f2)
+    fastfetch --logo {$distro_id}_small --structure Title:Separator:OS:Kernel:Uptime:Packages:Memory
     set -g fish_greeting ""
     alias ls='eza --icons --group-directories-first'
     alias ll='eza -lh --icons --group-directories-first'
