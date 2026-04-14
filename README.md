@@ -17,21 +17,38 @@ Al abrir el terminal verás fastfetch con el logo de Arch, el prompt de Starship
 
 ## Requisitos previos
 
-Arch Linux. Si usas otra distro, adapta los comandos de instalación.
+Arch Linux o Ubuntu (22.04+). Elige los comandos de tu distro en cada paso.
 
 ---
 
 ## 1. Instalar dependencias
 
+**Arch Linux:**
+
 ```bash
-sudo pacman -S fish fzf
+sudo pacman -S fish fzf eza bat duf fastfetch
+```
+
+> `eza`, `bat`, `duf` y `fastfetch` están en los repositorios oficiales. Si alguno no aparece, están igualmente en el AUR.
+
+**Ubuntu:**
+
+```bash
+sudo apt update && sudo apt install fish fzf bat duf fastfetch
 ```
 
 ```bash
-sudo pacman -S eza bat duf fastfetch
+# eza requiere Ubuntu 23.10+ o añadir el repo oficial:
+sudo mkdir -p /etc/apt/keyrings
+wget -qO- https://raw.githubusercontent.com/eza-community/eza/main/deb.asc | sudo gpg --dearmor -o /etc/apt/keyrings/gierens.gpg
+echo "deb [signed-by=/etc/apt/keyrings/gierens.gpg] http://deb.gierens.de stable main" | sudo tee /etc/apt/sources.list.d/gierens.list
+sudo apt update && sudo apt install eza
 ```
 
-> `eza`, `bat`, `duf` y `fastfetch` también están en los repositorios oficiales de Arch desde hace tiempo. Si alguno no aparece, están igualmente en el AUR.
+> En Ubuntu, `bat` se instala como `batcat`. Crea un enlace para que el alias funcione:
+> ```bash
+> mkdir -p ~/.local/bin && ln -s /usr/bin/batcat ~/.local/bin/bat
+> ```
 
 ---
 
@@ -39,8 +56,20 @@ sudo pacman -S eza bat duf fastfetch
 
 Necesaria para los iconos de `eza` y los glifos del prompt Starship.
 
+**Arch Linux:**
+
 ```bash
 sudo pacman -S ttf-jetbrains-mono-nerd
+```
+
+**Ubuntu:**
+
+```bash
+# Descarga e instala la Nerd Font manualmente:
+mkdir -p ~/.local/share/fonts
+wget -q https://github.com/ryanoasis/nerd-fonts/releases/latest/download/JetBrainsMono.zip -O /tmp/JetBrainsMono.zip
+unzip -o /tmp/JetBrainsMono.zip -d ~/.local/share/fonts/JetBrainsMono
+fc-cache -fv
 ```
 
 Después de instalarla, **configura tu emulador de terminal** para que use `JetBrainsMono Nerd Font` (o `JetBrainsMono NF`). Sin este paso los iconos aparecerán como cuadrados o interrogaciones.
@@ -49,14 +78,22 @@ Después de instalarla, **configura tu emulador de terminal** para que use `JetB
 
 ## 3. Instalar Starship
 
+**Cualquier distro** (método recomendado):
+
 ```bash
 curl -sS https://starship.rs/install.sh | sh
 ```
 
-O bien desde pacman:
+O bien desde el gestor de paquetes:
 
+**Arch Linux:**
 ```bash
 sudo pacman -S starship
+```
+
+**Ubuntu:**
+```bash
+# No está en apt; usa el script de arriba o Homebrew/cargo.
 ```
 
 ### Aplicar el preset `bracketed-segments`
@@ -90,7 +127,7 @@ Cierra sesión y vuelve a entrar para que el cambio surta efecto.
 mv ~/.config/fish ~/.config/fish.bak
 
 # Clonar el repositorio en su lugar
-git clone <url-del-repo> ~/.config/fish
+git clone https://github.com/alvarosac99/fish.git ~/.config/fish
 ```
 
 ---
@@ -121,7 +158,7 @@ fisher update
 
 Abre una nueva sesión de Fish. Deberías ver:
 
-1. **fastfetch** con el logo de Arch al abrir el terminal
+1. **fastfetch** con el logo de tu distro al abrir el terminal
 2. **Prompt de Starship** con el formato `[usuario@host] [directorio] [git]`
 3. `ls` mostrando iconos sin errores
 
