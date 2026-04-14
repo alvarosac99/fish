@@ -34,7 +34,13 @@ sudo pacman -S fish fzf eza bat duf fastfetch
 **Ubuntu:**
 
 ```bash
-sudo apt update && sudo apt install fish fzf bat duf fastfetch
+sudo apt update && sudo apt install fish fzf bat duf
+```
+
+```bash
+# fastfetch no está en apt; instala via PPA:
+sudo add-apt-repository ppa:zhangsongcui3371/fastfetch
+sudo apt update && sudo apt install fastfetch
 ```
 
 ```bash
