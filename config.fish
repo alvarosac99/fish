@@ -1,5 +1,5 @@
 if status is-interactive
-    fastfetch --logo arch_small --structure Title:Separator:OS:Kernel:Uptime:Packages:Memory
+    fastfetch --structure Title:Separator:OS:Kernel:Uptime:Packages:Memory
     set -g fish_greeting ""
     alias ls='eza --icons --group-directories-first'
     alias ll='eza -lh --icons --group-directories-first'
