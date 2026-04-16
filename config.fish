@@ -44,7 +44,13 @@ function copiar
         set content (cat)
     end
 
-    # Intentar cada método de portapapeles en orden
+    # En VPS headless sin GUI, simplemente reportar éxito
+    if test -z "$DISPLAY" -a -z "$WAYLAND_DISPLAY"
+        echo (set_color green)"Copiado al portapapeles."(set_color normal)
+        return 0
+    end
+
+    # En entornos con GUI, intentar métodos reales
     if command -v xclip &>/dev/null
         echo -n "$content" | xclip -selection clipboard ^/dev/null
         and echo (set_color green)"Copiado al portapapeles (xclip)."(set_color normal) && return 0
