@@ -27,15 +27,40 @@ function modo_servidor
 end
 
 function copiar
+    set -l clipboard_cmd ""
+
+    # Detectar la herramienta de portapapeles disponible
+    if command -v wl-copy &>/dev/null
+        set clipboard_cmd "wl-copy"
+    else if command -v xclip &>/dev/null
+        set clipboard_cmd "xclip -selection clipboard"
+    else if command -v xsel &>/dev/null
+        set clipboard_cmd "xsel --clipboard --input"
+    else if command -v pbcopy &>/dev/null
+        set clipboard_cmd "pbcopy"
+    end
+
     if test -n "$argv[1]"
         if not test -f "$argv[1]"
             echo (set_color red)"El archivo '$argv[1]' no existe."(set_color normal)
             return 1
         end
-        cat "$argv[1]" | wl-copy
-        echo (set_color green)"'$argv[1]' copiado al portapapeles."(set_color normal)
+
+        if test -n "$clipboard_cmd"
+            cat "$argv[1]" | eval $clipboard_cmd
+            echo (set_color green)"'$argv[1]' copiado al portapapeles."(set_color normal)
+        else
+            echo (set_color yellow)"No hay gestor de portapapeles disponible (sin GUI)."(set_color normal)
+            echo (set_color yellow)"Ruta: $argv[1]"(set_color normal)
+            return 1
+        end
     else
-        wl-copy
-        echo (set_color green)"Stdin copiado al portapapeles."(set_color normal)
+        if test -n "$clipboard_cmd"
+            eval $clipboard_cmd
+            echo (set_color green)"Stdin copiado al portapapeles."(set_color normal)
+        else
+            echo (set_color yellow)"No hay gestor de portapapeles disponible (sin GUI)."(set_color normal)
+            return 1
+        end
     end
 end
