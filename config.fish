@@ -31,40 +31,34 @@ function modo_servidor
 end
 
 function copiar
-    set -l clipboard_cmd ""
+    set -l content ""
 
-    # Detectar la herramienta de portapapeles disponible
-    if command -v wl-copy &>/dev/null
-        set clipboard_cmd "wl-copy"
-    else if command -v xclip &>/dev/null
-        set clipboard_cmd "xclip -selection clipboard"
-    else if command -v xsel &>/dev/null
-        set clipboard_cmd "xsel --clipboard --input"
-    else if command -v pbcopy &>/dev/null
-        set clipboard_cmd "pbcopy"
-    end
-
+    # Obtener contenido
     if test -n "$argv[1]"
         if not test -f "$argv[1]"
             echo (set_color red)"El archivo '$argv[1]' no existe."(set_color normal)
             return 1
         end
-
-        if test -n "$clipboard_cmd"
-            cat "$argv[1]" | eval $clipboard_cmd
-            echo (set_color green)"'$argv[1]' copiado al portapapeles."(set_color normal)
-        else
-            echo (set_color yellow)"No hay gestor de portapapeles disponible (sin GUI)."(set_color normal)
-            echo (set_color yellow)"Ruta: $argv[1]"(set_color normal)
-            return 1
-        end
+        set content (cat "$argv[1]")
     else
-        if test -n "$clipboard_cmd"
-            eval $clipboard_cmd
-            echo (set_color green)"Stdin copiado al portapapeles."(set_color normal)
-        else
-            echo (set_color yellow)"No hay gestor de portapapeles disponible (sin GUI)."(set_color normal)
-            return 1
-        end
+        set content (cat)
+    end
+
+    # Intentar cada método de portapapeles en orden
+    if command -v xclip &>/dev/null && echo -n "$content" | xclip -selection clipboard 2>/dev/null
+        echo (set_color green)"Copiado al portapapeles (xclip)."(set_color normal)
+        return 0
+    else if command -v xsel &>/dev/null && echo -n "$content" | xsel --clipboard --input 2>/dev/null
+        echo (set_color green)"Copiado al portapapeles (xsel)."(set_color normal)
+        return 0
+    else if command -v wl-copy &>/dev/null && echo -n "$content" | wl-copy 2>/dev/null
+        echo (set_color green)"Copiado al portapapeles (wayland)."(set_color normal)
+        return 0
+    else if command -v pbcopy &>/dev/null && echo -n "$content" | pbcopy 2>/dev/null
+        echo (set_color green)"Copiado al portapapeles (macOS)."(set_color normal)
+        return 0
+    else
+        echo (set_color yellow)"No hay gestor de portapapeles disponible."(set_color normal)
+        return 1
     end
 end
