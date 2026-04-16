@@ -13,15 +13,29 @@ function modo_servidor
     # 1. Desactivar el ahorro de energía del Wi-Fi (evita cortes)
     # Cambia 'wlan0' por tu interfaz si es necesario (míralo con 'ip a')
     sudo iw dev wlan0 set power_save off
-    echo (set_color green)"✔ Wi-Fi en modo alto rendimiento."(set_color normal)
+    echo (set_color green)"Wi-Fi en modo alto rendimiento."(set_color normal)
 
     # 2. Bloquear la sesión (funciona en GNOME, KDE, Hyprland y Sway)
     loginctl lock-session
-    echo (set_color blue)"✔ Sesión bloqueada."(set_color normal)
+    echo (set_color blue)"Sesión bloqueada."(set_color normal)
 
     # 3. Inhibir la suspensión
     echo (set_color yellow)"El ordenador NO se dormirá al cerrar la tapa."(set_color normal)
     echo "Presiona CTRL+C para volver al modo normal antes de desconectar."
-    
+
     systemd-inhibit --why="Compartiendo Internet" --who="$USER" --what=idle sleep infinity
+end
+
+function copiar
+    if test -n "$argv[1]"
+        if not test -f "$argv[1]"
+            echo (set_color red)"El archivo '$argv[1]' no existe."(set_color normal)
+            return 1
+        end
+        cat "$argv[1]" | wl-copy
+        echo (set_color green)"'$argv[1]' copiado al portapapeles."(set_color normal)
+    else
+        wl-copy
+        echo (set_color green)"Stdin copiado al portapapeles."(set_color normal)
+    end
 end
