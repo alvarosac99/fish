@@ -45,20 +45,26 @@ function copiar
     end
 
     # Intentar cada método de portapapeles en orden
-    if command -v xclip &>/dev/null && echo -n "$content" | xclip -selection clipboard 2>/dev/null
-        echo (set_color green)"Copiado al portapapeles (xclip)."(set_color normal)
-        return 0
-    else if command -v xsel &>/dev/null && echo -n "$content" | xsel --clipboard --input 2>/dev/null
-        echo (set_color green)"Copiado al portapapeles (xsel)."(set_color normal)
-        return 0
-    else if command -v wl-copy &>/dev/null && echo -n "$content" | wl-copy 2>/dev/null
-        echo (set_color green)"Copiado al portapapeles (wayland)."(set_color normal)
-        return 0
-    else if command -v pbcopy &>/dev/null && echo -n "$content" | pbcopy 2>/dev/null
-        echo (set_color green)"Copiado al portapapeles (macOS)."(set_color normal)
-        return 0
-    else
-        echo (set_color yellow)"No hay gestor de portapapeles disponible."(set_color normal)
-        return 1
+    if command -v xclip &>/dev/null
+        echo -n "$content" | xclip -selection clipboard ^/dev/null
+        and echo (set_color green)"Copiado al portapapeles (xclip)."(set_color normal) && return 0
     end
+
+    if command -v xsel &>/dev/null
+        echo -n "$content" | xsel --clipboard --input ^/dev/null
+        and echo (set_color green)"Copiado al portapapeles (xsel)."(set_color normal) && return 0
+    end
+
+    if command -v wl-copy &>/dev/null
+        echo -n "$content" | wl-copy ^/dev/null
+        and echo (set_color green)"Copiado al portapapeles (wayland)."(set_color normal) && return 0
+    end
+
+    if command -v pbcopy &>/dev/null
+        echo -n "$content" | pbcopy ^/dev/null
+        and echo (set_color green)"Copiado al portapapeles (macOS)."(set_color normal) && return 0
+    end
+
+    echo (set_color yellow)"No hay gestor de portapapeles disponible."(set_color normal)
+    return 1
 end
