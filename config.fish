@@ -5,7 +5,11 @@ if status is-interactive
     alias ls='eza --icons --group-directories-first'
     alias ll='eza -lh --icons --group-directories-first'
     alias df='duf -only local'
-    alias cat='bat'
+
+    # Usar bat solo si hay interfaz gráfica disponible
+    if test -n "$DISPLAY" -o -n "$WAYLAND_DISPLAY"
+        alias cat='bat'
+    end
 end
 starship init fish | source
 
