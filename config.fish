@@ -11,7 +11,6 @@ if status is-interactive
         alias cat='bat'
     end
 end
-starship init fish | source
 
 function modo_servidor
     # 1. Desactivar el ahorro de energía del Wi-Fi (evita cortes)
@@ -74,3 +73,4 @@ function copiar
     echo (set_color yellow)"No hay gestor de portapapeles disponible."(set_color normal)
     return 1
 end
+export PATH="$HOME/.local/bin:$PATH"
