@@ -82,17 +82,7 @@ Después de instalarla, **configura tu emulador de terminal** para que use `JetB
 
 ---
 
-## 3. El prompt (Tide)
-
-El prompt lo gestiona el plugin [Tide](https://github.com/IlanCosman/tide), instalado vía Fisher en el paso 6 — no requiere ningún paquete adicional del sistema. Una vez instalado, puedes relanzar el asistente de configuración en cualquier momento con:
-
-```fish
-tide configure
-```
-
----
-
-## 4. Establecer Fish como shell por defecto
+## 3. Establecer Fish como shell por defecto
 
 ```bash
 # Añadir fish a la lista de shells válidos si no está ya
@@ -106,7 +96,7 @@ Cierra sesión y vuelve a entrar para que el cambio surta efecto.
 
 ---
 
-## 5. Clonar y aplicar la configuración
+## 4. Clonar y aplicar la configuración
 
 ```fish
 # Hacer backup de tu config actual si la tienes
@@ -118,7 +108,7 @@ git clone https://github.com/alvarosac99/fish.git ~/.config/fish
 
 ---
 
-## 6. Instalar Fisher y los plugins
+## 5. Instalar Fisher y los plugins
 
 Abre Fish y ejecuta:
 
@@ -140,12 +130,12 @@ fisher update
 
 ---
 
-## 7. Verificar la instalación
+## 6. Verificar la instalación
 
 Abre una nueva sesión de Fish. Deberías ver:
 
 1. **fastfetch** con el logo de tu distro al abrir el terminal
-2. **Prompt de Tide** (ejecuta `tide configure` si quieres personalizarlo)
+2. **Prompt de Tide** con el aspecto configurado
 3. `ls` mostrando iconos sin errores
 
 ```fish
@@ -156,6 +146,28 @@ duf --version
 fzf --version
 fastfetch --version
 tide --help
+```
+
+---
+
+## 7. Configurar Tide
+
+El repositorio incluye `conf.d/tide_config.fish` con todas las variables de Tide predefinidas, por lo que el prompt tendrá el mismo aspecto que el original nada más clonar (sin necesidad de ejecutar `tide configure`).
+
+Si quieres personalizar el prompt más adelante:
+
+```fish
+tide configure
+```
+
+Para actualizar el fichero de config versionado con tus cambios actuales, clona el repo, ejecuta `tide configure` y luego regenera `conf.d/tide_config.fish` con:
+
+```fish
+fish -c '
+  for v in (set -U --names | string match -r "^tide_")
+    echo "set -q $v; or set -U $v "(string escape -- $$v)
+  end
+' | sort > ~/.config/fish/conf.d/tide_config.fish
 ```
 
 ---
