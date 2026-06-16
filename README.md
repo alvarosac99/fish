@@ -1,10 +1,10 @@
 # Fish Shell Config
 
-Configuración personal de Fish shell con prompt Starship, herramientas modernas de terminal y plugins de productividad.
+Configuración personal de Fish shell con prompt Tide, herramientas modernas de terminal y plugins de productividad.
 
 ## Vista previa
 
-Al abrir el terminal verás fastfetch con el logo de Arch, el prompt de Starship con el preset `bracketed-segments` y las siguientes mejoras activas:
+Al abrir el terminal verás fastfetch con el logo de Arch, el prompt de Tide y las siguientes mejoras activas:
 
 - `ls` / `ll` con iconos y directorios primero (eza)
 - `cat` con resaltado de sintaxis (bat)
@@ -60,7 +60,7 @@ sudo apt update && sudo apt install eza
 
 ## 2. Instalar la fuente JetBrainsMono Nerd Font
 
-Necesaria para los iconos de `eza` y los glifos del prompt Starship.
+Necesaria para los iconos de `eza` y los glifos del prompt Tide.
 
 **Arch Linux:**
 
@@ -82,33 +82,13 @@ Después de instalarla, **configura tu emulador de terminal** para que use `JetB
 
 ---
 
-## 3. Instalar Starship
+## 3. El prompt (Tide)
 
-**Cualquier distro** (método recomendado):
-
-```bash
-curl -sS https://starship.rs/install.sh | sh
-```
-
-O bien desde el gestor de paquetes:
-
-**Arch Linux:**
-```bash
-sudo pacman -S starship
-```
-
-**Ubuntu:**
-```bash
-# No está en apt; usa el script de arriba o Homebrew/cargo.
-```
-
-### Aplicar el preset `bracketed-segments`
+El prompt lo gestiona el plugin [Tide](https://github.com/IlanCosman/tide), instalado vía Fisher en el paso 6 — no requiere ningún paquete adicional del sistema. Una vez instalado, puedes relanzar el asistente de configuración en cualquier momento con:
 
 ```fish
-starship preset bracketed-segments -o ~/.config/starship.toml
+tide configure
 ```
-
-> Si ya tienes el `starship.toml` de este repositorio en su sitio, omite este paso: el fichero ya está configurado con ese preset.
 
 ---
 
@@ -150,13 +130,13 @@ curl -sL https://raw.githubusercontent.com/jorgebucaran/fisher/main/functions/fi
 fisher update
 ```
 
-`fisher update` lee `fish_plugins` e instala automáticamente todos los plugins declarados:
+`fisher update` lee `fish_plugins` e instala automáticamente el plugin declarado:
 
 | Plugin | Función |
 |--------|---------|
-| `jorgebucaran/autopair.fish` | Cierra automáticamente `(`, `[`, `{`, `"`, `'` |
-| `franciscolourenco/done` | Notificación de escritorio cuando un comando tarda más de unos segundos |
-| `patrickf1/fzf.fish` | Integración de fzf: `Ctrl+R` historial, `Ctrl+F` ficheros, `Ctrl+V` variables |
+| `ilancosman/tide@v6` | Prompt principal (segmentos, git, duración de comandos, etc.) |
+
+> `autopair`, `done` (notificaciones) y la integración de `fzf` ya **no** se gestionan con Fisher: sus ficheros están versionados directamente en `functions/` y `conf.d/` de este repositorio, así que funcionan sin pasos adicionales.
 
 ---
 
@@ -165,7 +145,7 @@ fisher update
 Abre una nueva sesión de Fish. Deberías ver:
 
 1. **fastfetch** con el logo de tu distro al abrir el terminal
-2. **Prompt de Starship** con el formato `[usuario@host] [directorio] [git]`
+2. **Prompt de Tide** (ejecuta `tide configure` si quieres personalizarlo)
 3. `ls` mostrando iconos sin errores
 
 ```fish
@@ -175,8 +155,14 @@ bat --version
 duf --version
 fzf --version
 fastfetch --version
-starship --version
+tide --help
 ```
+
+---
+
+## Notas
+
+- **`uv`**: si usas [uv](https://docs.astral.sh/uv/) (gestor de paquetes Python), `conf.d/uv.env.fish` carga automáticamente su entorno (`~/.local/bin/env.fish`) cuando está instalado. Si no usas `uv`, no hace falta nada: el fichero comprueba que exista antes de cargarlo.
 
 ---
 
