@@ -56,6 +56,14 @@ sudo apt update && sudo apt install eza
 > mkdir -p ~/.local/bin && ln -s /usr/bin/batcat ~/.local/bin/bat
 > ```
 
+**Fedora:**
+
+```bash
+sudo dnf install fish fzf eza bat duf fastfetch
+```
+
+> Todos los paquetes están en los repos oficiales de Fedora (39+). No hace falta ningún repo extra.
+
 ---
 
 ## 2. Instalar la fuente JetBrainsMono Nerd Font
@@ -77,6 +85,14 @@ wget -q https://github.com/ryanoasis/nerd-fonts/releases/latest/download/JetBrai
 unzip -o /tmp/JetBrainsMono.zip -d ~/.local/share/fonts/JetBrainsMono
 fc-cache -fv
 ```
+
+**Fedora:**
+
+```bash
+sudo dnf install jetbrains-mono-nl-fonts
+```
+
+> Si tu versión de Fedora no trae ese paquete, instala manualmente igual que en Ubuntu (ver arriba).
 
 Después de instalarla, **configura tu emulador de terminal** para que use `JetBrainsMono Nerd Font` (o `JetBrainsMono NF`). Sin este paso los iconos aparecerán como cuadrados o interrogaciones.
 
