@@ -17,7 +17,7 @@ Al abrir el terminal verás fastfetch con el logo de Arch, el prompt de Tide y l
 
 ## Requisitos previos
 
-Arch Linux o Ubuntu (22.04+). Elige los comandos de tu distro en cada paso.
+Arch Linux, Ubuntu (22.04+), Debian (12+) o Fedora. Elige los comandos de tu distro en cada paso.
 
 ---
 
@@ -56,6 +56,31 @@ sudo apt update && sudo apt install eza
 > mkdir -p ~/.local/bin && ln -s /usr/bin/batcat ~/.local/bin/bat
 > ```
 
+**Debian:**
+
+```bash
+sudo apt update && sudo apt install fish fzf bat duf
+```
+
+```bash
+# fastfetch no está en apt (Debian 12 "bookworm"); instala el .deb desde el release de GitHub:
+wget -q https://github.com/fastfetch-cli/fastfetch/releases/latest/download/fastfetch-linux-amd64.deb -O /tmp/fastfetch.deb
+sudo apt install /tmp/fastfetch.deb
+```
+
+```bash
+# eza no está en apt; añade el repo oficial:
+sudo mkdir -p /etc/apt/keyrings
+wget -qO- https://raw.githubusercontent.com/eza-community/eza/main/deb.asc | sudo gpg --dearmor -o /etc/apt/keyrings/gierens.gpg
+echo "deb [signed-by=/etc/apt/keyrings/gierens.gpg] http://deb.gierens.de stable main" | sudo tee /etc/apt/sources.list.d/gierens.list
+sudo apt update && sudo apt install eza
+```
+
+> En Debian, `bat` se instala como `batcat`. Crea un enlace para que el alias funcione:
+> ```bash
+> mkdir -p ~/.local/bin && ln -s /usr/bin/batcat ~/.local/bin/bat
+> ```
+
 **Fedora:**
 
 ```bash
@@ -86,13 +111,26 @@ unzip -o /tmp/JetBrainsMono.zip -d ~/.local/share/fonts/JetBrainsMono
 fc-cache -fv
 ```
 
-**Fedora:**
+**Debian:**
 
 ```bash
-sudo dnf install jetbrains-mono-nl-fonts
+# Descarga e instala la Nerd Font manualmente:
+mkdir -p ~/.local/share/fonts
+wget -q https://github.com/ryanoasis/nerd-fonts/releases/latest/download/JetBrainsMono.zip -O /tmp/JetBrainsMono.zip
+unzip -o /tmp/JetBrainsMono.zip -d ~/.local/share/fonts/JetBrainsMono
+fc-cache -fv
 ```
 
-> Si tu versión de Fedora no trae ese paquete, instala manualmente igual que en Ubuntu (ver arriba).
+**Fedora:**
+
+> `jetbrains-mono-nl-fonts` de los repos de Fedora **no** es una Nerd Font (no lleva los glifos de iconos parcheados). Usa el mismo método manual que en Ubuntu:
+
+```bash
+mkdir -p ~/.local/share/fonts
+wget -q https://github.com/ryanoasis/nerd-fonts/releases/latest/download/JetBrainsMono.zip -O /tmp/JetBrainsMono.zip
+unzip -o /tmp/JetBrainsMono.zip -d ~/.local/share/fonts/JetBrainsMono
+fc-cache -fv
+```
 
 Después de instalarla, **configura tu emulador de terminal** para que use `JetBrainsMono Nerd Font` (o `JetBrainsMono NF`). Sin este paso los iconos aparecerán como cuadrados o interrogaciones.
 
@@ -109,6 +147,11 @@ chsh -s /usr/bin/fish
 ```
 
 Cierra sesión y vuelve a entrar para que el cambio surta efecto.
+
+> **Kitty:** algunos emuladores como Kitty no respetan el shell por defecto del sistema (`chsh`) y lanzan bash igual. Fuerza el shell en `~/.config/kitty/kitty.conf`:
+> ```
+> shell /usr/bin/fish
+> ```
 
 ---
 
